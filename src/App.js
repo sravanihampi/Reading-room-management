@@ -1,25 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import BookingForm from './components/BookingForm';
+import Table from './components/Table';
 
-function App() {
+const tablesCount = 20;
+
+const App = () => {
+  const [bookings, setBookings] = useState({});
+  const [totalAmount, setTotalAmount] = useState(0);
+
+  const handleBooking = (table, slot) => {
+    setBookings((prevBookings) => ({
+      ...prevBookings,
+      [table]: slot,
+    }));
+    setTotalAmount(totalAmount + 50);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container">
+      <h1>Reading Room Management System</h1>
+      <BookingForm bookings={bookings} onBooking={handleBooking} />
+      <div className="table-grid">
+        {Array.from({ length: tablesCount }, (_, i) => (
+          <Table key={i} table={i + 1} bookings={bookings} />
+        ))}
+      </div>
+      <h2>Total Amount: INR {totalAmount}</h2>
     </div>
   );
-}
+};
 
 export default App;
